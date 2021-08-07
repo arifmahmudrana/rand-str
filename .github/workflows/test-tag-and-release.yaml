@@ -2,7 +2,7 @@ name: Tag and release
 on:
   push:
     branches:
-      - master
+      - main
 env:
   GO_VERSION: '1.16'
 jobs:
