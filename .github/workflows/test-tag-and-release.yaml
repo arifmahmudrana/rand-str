@@ -1,0 +1,102 @@
+name: Tag and release
+on:
+  push:
+    branches:
+      - master
+env:
+  GO_VERSION: '1.16'
+jobs:
+  test:
+    name: Test code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Setup caching of GO modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      - name: Run unit tests
+        run: go test -race ./...
+
+  tag:
+    needs: test
+    name: Tag new version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Configure Git
+        run: |
+          git config --global user.name "Arif Mahmud Rana"
+          git config --global user.email "arif_mahmud_rana@hotmail.com"
+      - name: Install ccv
+        run: >
+          curl -sSL https://github.com/smlx/ccv/releases/download/v0.3.2/ccv_0.3.2_linux_amd64.tar.gz
+          | sudo tar -xz -C /usr/local/bin ccv
+      - name: Install svu
+        run: >
+          curl -sSL https://github.com/caarlos0/svu/releases/download/v1.6.1/svu_1.6.1_linux_amd64.tar.gz
+          | sudo tar -xz -C /usr/local/bin svu
+      - name: Bump tag
+        run: |
+          if [ -z $(git tag -l $(ccv)) ]
+          then
+            git tag $(ccv)            
+          elif [ -z $(git tag -l $(svu next)) ]
+          then
+            git tag $(svu next)
+          else
+            git tag $(svu p)
+          fi
+          git push --tags
+
+  release:
+    needs: tag
+    name: Release new version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Setup caching of GO modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v2
+        with:
+          version: latest
+          args: release --rm-dist
+          workdir: cmd
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
