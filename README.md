@@ -4,7 +4,7 @@ Random string generator
 This CLI allows random string easyly from string set with given size.
 
 ## Releases
-To run this CLI go to [releases](/releases) and find the appropriate build from release page.
+To run this CLI go to [releases](https://github.com/arifmahmudrana/rand-str/releases) and find the appropriate build from release page.
 
 ## Usage
 This CLI supports two features
