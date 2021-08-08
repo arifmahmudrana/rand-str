@@ -1,3 +1,5 @@
+## <div align="center">[![Tag and release](https://github.com/arifmahmudrana/rand-str/actions/workflows/test-tag-and-release.yaml/badge.svg)](https://github.com/arifmahmudrana/rand-str/actions/workflows/test-tag-and-release.yaml) [![Go Report Card](https://goreportcard.com/badge/github.com/arifmahmudrana/rand-str)](https://goreportcard.com/report/github.com/arifmahmudrana/rand-str) [![codecov](https://codecov.io/gh/arifmahmudrana/rand-str/branch/main/graph/badge.svg)](https://codecov.io/gh/arifmahmudrana/rand-str)</div>
+
 Random string generator
 ================
 
@@ -33,11 +35,11 @@ go test -v -race ./...
 
 To get test coverage
 ```sh
-go test -v -race -coverprofile=/tmp/go-cover.`basename $(pwd)`.out ./... && go tool cover -func=/tmp/go-cover.`basename $(pwd)`.out && unlink /tmp/go-cover.`basename $(pwd)`.out
+go test -v -race -coverprofile=/tmp/go-cover.`basename $(pwd)`.out -covermode=atomic ./... && go tool cover -func=/tmp/go-cover.`basename $(pwd)`.out && unlink /tmp/go-cover.`basename $(pwd)`.out
 ```
 Or
 ```sh
-go test -v -race -coverprofile=/tmp/go-cover.`basename $(pwd)`.out ./... && go tool cover -html=/tmp/go-cover.`basename $(pwd)`.out && unlink /tmp/go-cover.`basename $(pwd)`.out
+go test -v -race -coverprofile=/tmp/go-cover.`basename $(pwd)`.out -covermode=atomic ./... && go tool cover -html=/tmp/go-cover.`basename $(pwd)`.out && unlink /tmp/go-cover.`basename $(pwd)`.out
 ```
 
 ## Build
