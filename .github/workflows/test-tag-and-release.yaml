@@ -31,7 +31,10 @@ jobs:
             ${{ runner.os }}-go-
 
       - name: Run unit tests
-        run: go test -race ./...
+        run: go test -race -coverprofile=coverage.txt -covermode=atomic ./...
+
+      - name: Upload coverage to Codecov
+        run: bash <(curl -s https://codecov.io/bash)
 
   tag:
     needs: test
