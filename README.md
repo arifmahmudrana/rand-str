@@ -9,9 +9,6 @@ This CLI allows random string easyly from string set with given size.
 To run this CLI go to [releases](https://github.com/arifmahmudrana/rand-str/releases) and find the appropriate build from release page.
 
 ## Usage
-This CLI supports two features
-1. Setting up stores by adding necessary configurations time series etc.
-2. Importing data of store
 
 To run command first grab an executable from [release](#releases).
 ```sh
